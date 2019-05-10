@@ -137,6 +137,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+/*
+function $(selector){
+  return document.querySelector(selector);
+}
+*/
 var $ = function $(selector) {
   return document.querySelector(selector);
 };
@@ -153,24 +158,84 @@ function () {
     _classCallCheck(this, Player);
 
     this.root = typeof node === 'string' ? $(node) : node;
+    this.songList = [];
+    this.currentIndex = 0;
+    this.audio = new Audio();
+    this.start();
+    this.bind();
   }
 
   _createClass(Player, [{
+    key: "start",
+    value: function start() {
+      var _this = this;
+
+      fetch('https://jirengu.github.io/data-mock/huawei-music/music-list.json').then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        console.log(data);
+        _this.songList = data;
+        _this.audio.src = _this.songList[_this.currentIndex].url;
+        console.log(_this.audio.src);
+      });
+    }
+  }, {
     key: "bind",
-    value: function bind() {}
+    value: function bind() {
+      var _this2 = this;
+
+      var self = this;
+      console.log(this.root.querySelector('.btn-play-pause').classList);
+      this.root.querySelector('.btn-play-pause').addEventListener('click', function () {
+        if (this.classList.contains('playing')) {
+          self.audio.pause();
+          this.classList.remove('playing');
+          this.classList.add('pause');
+          this.querySelector('use').setAttribute('xlink:href', '#icon-play');
+        } else if (this.classList.contains('pause')) {
+          self.audio.play();
+          this.classList.remove('pause');
+          this.classList.add('playing');
+          this.querySelector('use').setAttribute('xlink:href', '#icon-pause');
+        }
+      });
+      this.root.querySelector('.btn-pre').addEventListener('click', function () {
+        _this2.playPrevSong();
+      });
+      this.root.querySelector('.btn-next').addEventListener('click', function () {
+        _this2.playNextSong();
+      });
+    }
+  }, {
+    key: "playPrevSong",
+    value: function playPrevSong() {
+      var _this3 = this;
+
+      this.currentIndex = (this.songList.length + this.currentIndex - 1) % this.songList.length;
+      this.audio.src = this.songList[this.currentIndex].url;
+
+      this.audio.oncanplaythrough = function () {
+        return _this3.audio.play();
+      };
+    }
+  }, {
+    key: "playNextSong",
+    value: function playNextSong() {
+      var _this4 = this;
+
+      this.currentIndex = (this.songList.length + this.currentIndex + 1) % this.songList.length;
+      this.audio.src = this.songList[this.currentIndex].url;
+
+      this.audio.oncanplaythrough = function () {
+        return _this4.audio.play();
+      };
+    }
   }]);
 
   return Player;
 }();
-/*ES5写法
-function Player(){
 
-}
-Player.prototyep.bind = function(){
-
-}
-
-*/
+new Player($('#player'));
 },{"./icons.js":"src/js/icons.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -199,7 +264,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33234" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54026" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
