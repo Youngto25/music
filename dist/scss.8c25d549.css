@@ -106,10 +106,16 @@
 .player .area-effect .panel-lyrics {
   height: 100%;
   width: 100vw;
+  text-align: center;
+  line-height: 20px;
+  overflow: hidden;
 }
-.player .area-effect .panel-lyrics p {
+.player .area-effect .panel-lyrics .container p {
   font-size: 13px;
   color: #868aaf;
+}
+.player .area-effect .panel-lyrics .container.current {
+  color: #fff;
 }
 .player footer {
   height: 170px;

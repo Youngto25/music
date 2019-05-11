@@ -114,10 +114,19 @@ $color3: #0025f1;
     .panel-lyrics{
       height: 100%;
       width: 100vw;
-      p{
-        font-size: 13px;
-        color: $color1;
-      }
+      text-align: center;
+      line-height: 20px;
+      overflow: hidden;
+      .container{
+        p{
+          font-size: 13px;
+          color: $color1;
+        }
+
+        &.current{
+          color: $color;
+        }
+      }   
     }
   }
   footer{
